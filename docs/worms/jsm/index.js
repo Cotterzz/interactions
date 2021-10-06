@@ -58,7 +58,7 @@ fbxLoader.load(
         object.scale.set(.1, .1, .1);
         
         worm = object;
-        scene.add(object);
+        scene.add(worm);
         worm.traverse(function (child) {
                 
             if(child.animations.length>0){
