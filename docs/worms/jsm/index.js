@@ -42,7 +42,7 @@ let mixer;
 
 const fbxLoader = new FBXLoader()
 fbxLoader.load(
-    'worm_dive.fbx',
+    'model/worm_dive.fbx',
 //const gltfLoader = new GLTFLoader()
 //gltfLoader.load(
     //'worm_dive.gltf',
