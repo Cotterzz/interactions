@@ -1,0 +1,71 @@
+.pfitem {
+   margin: 10px;
+   padding: 10px;
+   position:relative;
+   background-color: #333;
+   transform: rotateY(-15deg) translateX(-10px);
+   transition: all 0.3s ease-in-out;
+   filter: brightness(70%);
+   z-index:1;
+}
+
+.pfitem:hover {
+  transform: rotateY(0deg) translateX(10px);
+  filter: brightness(100%);
+  z-index:2;
+}
+
+h2 {
+	color:#FFF;
+	margin: 0px;
+    padding: 0px;
+}
+
+h3 {
+	color:#FFF;
+	margin: 0px;
+    padding: 0px;
+}
+
+h4 {
+	color:#FFF;
+	margin: 0px;
+    padding: 0px;
+}
+
+body {
+	font-family: Verdana, Geneva, sans-serif;
+    background-color: #000;
+    color: #EEE;
+    margin: 10px;
+    padding: 10px;
+}
+
+video {
+	display: inline-block;
+	width: 300px;
+	
+	margin: 0px;
+	padding: 0px;
+}
+
+.pftext {
+	display: inline-block;
+	max-width: 70%;
+	padding: 10px;
+    margin: 0px;
+}
+
+a:link {
+    color:#00E6FFFF
+}
+
+/* visited link */
+a:visited {
+    color:#F676FDFF
+}
+
+/* mouse over link */
+a:hover {
+    color: #CCFEFEFF
+}
