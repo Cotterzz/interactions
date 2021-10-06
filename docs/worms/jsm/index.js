@@ -6,7 +6,6 @@ import Stats from '/jsm/stats.module.js'
 import * as SKUTILS from '/jsm/SkeletonUtils.js'
 
 const scene = new THREE.Scene()
-//scene.add(new THREE.AxesHelper(5))
 
 const light = new THREE.PointLight()
 light.position.set(0.8, 1.4, 1.0)
@@ -15,79 +14,56 @@ scene.add(light)
 const ambientLight = new THREE.AmbientLight()
 scene.add(ambientLight)
 
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-)
-camera.position.set(0.8, 1.4, 1.0)
+const cNear = 1;
+const cFar = 100000;
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight,cNear,cFar);
+camera.position.set(0, .5, 0)
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("canvas3d"),antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight)
 
-
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
-controls.target.set(0, 1, 0)
-
-//const material = new THREE.MeshNormalMaterial()
+controls.target.set(0, 1, -3)
 
 let worm;
 let count = 15;
 let worms = new Array(count);
-let animations = new Array(count)
 
-let mixer;
+let mixer; // ORIGINAL
+let mixers = new Array(count);  // CLONES
 
 const fbxLoader = new FBXLoader()
 fbxLoader.load(
     'model/worm_dive.fbx',
-//const gltfLoader = new GLTFLoader()
-//gltfLoader.load(
-    //'worm_dive.gltf',
     (object) => {
 
-        //if ((child as THREE.Mesh).isMesh) {
-        //         // (child as THREE.Mesh).material = material
-        //         if ((child as THREE.Mesh).material) {
-        //             ((child as THREE.Mesh).material as THREE.MeshBasicMaterial).transparent = false
-        //         }
-            // }
-        //});
+        // ORIGINAL
         object.scale.set(.1, .1, .1);
-        
         worm = object;
         scene.add(worm);
         worm.traverse(function (child) {
-                
             if(child.animations.length>0){
                 console.log(child);
                 mixer = new THREE.AnimationMixer( child );
-                //console.log(child);
-                //animations[p] = child.animations[0];
                 mixer.clipAction( child.animations[0]).play();
             }
-            });
-        
-        //duplicateObject();
+        });
+
+        // CLONES
         for ( let p = 0; p < count; p ++ ) {
             worms[p] = SKUTILS.clone(worm);
-            //console.log(worms[p])
             scene.add(worms[p]);
             worms[p].position.set((Math.random()*5)-2.5, 0, Math.random()*-5);
             worms[p].rotation.y = Math.random()*6;
-            
             worms[p].traverse(function (child) {
-               //console.log(child);
                 if(child.animations.length>0){
-
-                    //console.log(child);
-                    animations[p] = child.animations[0];
-                    mixer.clipAction( child.animations[0] ).play();
+                    mixers[p] = new THREE.AnimationMixer( child );
+                    mixers[p].clipAction( child.animations[0] ).play();
                 }
             });
         }
+
         animate();
     },
     (xhr) => {
@@ -97,8 +73,6 @@ fbxLoader.load(
         console.log(error)
     }
 )
-
-
 
 var tanFOV = Math.tan((Math.PI / 360) * camera.fov);
 var windowHeight = window.innerHeight;
@@ -115,15 +89,17 @@ const stats = Stats()
 document.body.appendChild(stats.dom)
 
 function animate() {
-    requestAnimationFrame(animate)
+
+    mixer.update(); // ORIGINAL
+
+    for ( let p = 0; p < count; p ++ ) {
+        mixers[p]?.update(); // CLONES
+    }
 
     controls.update()
-
-    mixer.update()
-
-    render()
-
     stats.update()
+    render()
+    requestAnimationFrame(animate)
 }
 
 function render() {
