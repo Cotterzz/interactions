@@ -1,6 +1,6 @@
 // This uses top level await in a module - tested with latest versions of firefox, chrome and edge.
 // May need to be transpiled for older browsers
-let urlprefix = ""; //"/00746_EarthyIslands_Phase2/poc/butterflies"
+let urlprefix = "https://objectv.github.io/interactions/"
 let urlprefix2 = ""; //urlprefix  + "/"
 
 console.log("URL: " + window.location.href);
