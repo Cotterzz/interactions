@@ -1,11 +1,11 @@
 // This uses top level await in a module - tested with latest versions of firefox, chrome and edge.
 // May need to be transpiled for older browsers
-let urlprefix = "https://objectv.github.io/interactions/"
-let urlprefix2 = ""; //urlprefix  + "/"
+let urlArray = window.location.href.split("/"); urlArray.pop();
+let urlprefix = urlArray.join("/")  + "/";
+globalThis.urlprefix = urlprefix;
+console.log("URLPREFIX: " + urlprefix);
 
-console.log("URL: " + window.location.href);
-
-const THREE = await import(urlprefix + "jsm/three.module.js")
+const THREE = await import(urlprefix + "jsm/three.module.js");
 const { OrbitControls } = await import(urlprefix + "jsm/OrbitControls.js")
 //const { GLTFLoader } = await import(urlprefix + "/jsm/GLTFLoader.js")
 //const Stats = await import(urlprefix + "/jsm/stats.module.js")
@@ -112,10 +112,10 @@ const imageLoader = new THREE.TextureLoader();
     animate();
 //}
 
-imageLoader.load( urlprefix2 + 'butterflies/wing.jpg',
+imageLoader.load( urlprefix + 'butterflies/wing.jpg',
     function ( image ) {
         wingImage = image;
-        geomLoader.load( urlprefix2 + 'butterflies/wing_geometry.json', function ( geometry ) {
+        geomLoader.load( urlprefix + 'butterflies/wing_geometry.json', function ( geometry ) {
         wingGeometry = geometry.translate ( -0.7, 0, 0 ) ;
     
         wingGeometry.computeVertexNormals();
