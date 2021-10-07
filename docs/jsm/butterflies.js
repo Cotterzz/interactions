@@ -3,8 +3,8 @@
 let urlprefix = ""; //"/00746_EarthyIslands_Phase2/poc/butterflies"
 let urlprefix2 = ""; //urlprefix  + "/"
 
-const THREE = await import(urlprefix + "../../interactions/jsm/three.module.js")
-const { OrbitControls } = await import(urlprefix + "../../interactions/jsm/OrbitControls.js")
+const THREE = await import(urlprefix + "/jsm/three.module.js")
+const { OrbitControls } = await import(urlprefix + "/jsm/OrbitControls.js")
 //const { GLTFLoader } = await import(urlprefix + "/jsm/GLTFLoader.js")
 //const Stats = await import(urlprefix + "/jsm/stats.module.js")
 //const { GUI } = await import(urlprefix + "/jsm/dat.gui.module.js")
@@ -110,10 +110,10 @@ const imageLoader = new THREE.TextureLoader();
     animate();
 //}
 
-imageLoader.load( urlprefix2 + 'models/wing.jpg',
+imageLoader.load( urlprefix2 + 'butterflies/wing.jpg',
     function ( image ) {
         wingImage = image;
-        geomLoader.load( urlprefix2 + 'models/wing_geometry.json', function ( geometry ) {
+        geomLoader.load( urlprefix2 + 'butterflies/wing_geometry.json', function ( geometry ) {
         wingGeometry = geometry.translate ( -0.7, 0, 0 ) ;
     
         wingGeometry.computeVertexNormals();
