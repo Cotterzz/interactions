@@ -1,48 +1,48 @@
-import {
-	AmbientLight,
-	AnimationClip,
-	Bone,
-	BufferGeometry,
-	ClampToEdgeWrapping,
-	Color,
-	DirectionalLight,
-	EquirectangularReflectionMapping,
-	Euler,
-	FileLoader,
-	Float32BufferAttribute,
-	Group,
-	Line,
-	LineBasicMaterial,
-	Loader,
-	LoaderUtils,
-	MathUtils,
-	Matrix3,
-	Matrix4,
-	Mesh,
-	MeshLambertMaterial,
-	MeshPhongMaterial,
-	NumberKeyframeTrack,
-	Object3D,
-	OrthographicCamera,
-	PerspectiveCamera,
-	PointLight,
-	PropertyBinding,
-	Quaternion,
-	QuaternionKeyframeTrack,
-	RepeatWrapping,
-	Skeleton,
-	SkinnedMesh,
-	SpotLight,
-	Texture,
-	TextureLoader,
-	Uint16BufferAttribute,
-	Vector3,
-	Vector4,
-	VectorKeyframeTrack,
-	sRGBEncoding
-} from '/jsm/three.module.js';
-import * as fflate from '/jsm/fflate.module.js';
-import { NURBSCurve } from '/jsm/NURBSCurve.js';
+const THREE = await import(urlprefix + "jsm/three.module.js");
+const AmbientLight = THREE.AmbientLight
+const AnimationClip = THREE.AnimationClip
+const Bone = THREE.Bone
+const BufferGeometry = THREE.BufferGeometry
+const ClampToEdgeWrapping = THREE.ClampToEdgeWrapping
+const Color = THREE.Color
+const DirectionalLight = THREE.DirectionalLight
+const EquirectangularReflectionMap = THREE.EquirectangularReflectionMaping
+const Euler = THREE.Euler
+const FileLoader = THREE.FileLoader
+const Float32BufferAttribute = THREE.Float32BufferAttribute
+const Group = THREE.Group
+const Line = THREE.Line
+const LineBasicMaterial = THREE.LineBasicMaterial
+const Loader = THREE.Loader
+const LoaderUtils = THREE.LoaderUtils
+const MathUtils = THREE.MathUtils
+const Matrix3 = THREE.Matrix3
+const Matrix4 = THREE.Matrix4
+const Mesh = THREE.Mesh
+const MeshLambertMaterial = THREE.MeshLambertMaterial
+const MeshPhongMaterial = THREE.MeshPhongMaterial
+const NumberKeyframeTrack = THREE.NumberKeyframeTrack
+const Object3D = THREE.Object3D
+const OrthographicCamera = THREE.OrthographicCamera
+const PerspectiveCamera = THREE.PerspectiveCamera
+const PointLight = THREE.PointLight
+const PropertyBinding = THREE.PropertyBinding
+const Quaternion = THREE.Quaternion
+const QuaternionKeyframeTrack = THREE.QuaternionKeyframeTrack
+const RepeatWrapping = THREE.RepeatWrapping
+const Skeleton = THREE.Skeleton
+const SkinnedMesh = THREE.SkinnedMesh
+const SpotLight = THREE.SpotLight
+const Texture = THREE.Texture
+const TextureLoader = THREE.TextureLoader
+const Uint16BufferAttribute = THREE.Uint16BufferAttribute
+const Vector3 = THREE.Vector3
+const Vector4 = THREE.Vector4
+const VectorKeyframeTrack = THREE.VectorKeyframeTrack
+const sRGBEncoding = THREE.sRGBEncoding
+
+const fflate = await import(urlprefix + "jsm/fflate.module.js");
+const  NURBSCurve = await import(urlprefix + "jsm/NURBSCurve.js");
 
 /**
  * Loader loads FBX file and generates Group representing FBX scene.
