@@ -1,8 +1,8 @@
-import {
-	Vector3,
-	Vector4
-} from '/jsm/three.module.js';
 
+
+const THREE = await import(urlprefix + "jsm/three.module.js");
+const Vector3 = THREE.Vector3;
+const Vector4 = THREE.Vector4;
 /**
  * NURBS utils
  *
