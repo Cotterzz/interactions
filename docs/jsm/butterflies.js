@@ -3,6 +3,8 @@
 let urlprefix = ""; //"/00746_EarthyIslands_Phase2/poc/butterflies"
 let urlprefix2 = ""; //urlprefix  + "/"
 
+console.log("URL: " + window.location.href);
+
 const THREE = await import(urlprefix + "jsm/three.module.js")
 const { OrbitControls } = await import(urlprefix + "jsm/OrbitControls.js")
 //const { GLTFLoader } = await import(urlprefix + "/jsm/GLTFLoader.js")
