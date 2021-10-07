@@ -1,0 +1,30 @@
+body {
+	font-family: 'Quicksand', sans-serif;
+	background-color: #ffffff;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+}
+
+#overlay {
+	position: absolute;
+	top: 0px;
+	left:0px;
+	z-index: 1;
+	width:100%;
+}
+
+#overlay_left {
+	position: absolute;
+	left: 0px;
+
+}
+
+#overlay_right {
+	position: absolute;
+	right:0px;
+}
+
+button {
+	width:60px;
+}
