@@ -1,9 +1,8 @@
-import {
-	Curve,
-	Vector3,
-	Vector4
-} from '/jsm/three.module.js';
-import * as NURBSUtils from '/jsm/NURBSUtils.js';
+const THREE = await import(urlprefix + "jsm/three.module.js");
+const Vector3 = THREE.Vector3;
+const Vector4 = THREE.Vector4;
+const Curve = THREE.Curve;
+const NURBSUtils  = await import(urlprefix + "jsm/NURBSUtils.js");
 
 /**
  * NURBS curve object
