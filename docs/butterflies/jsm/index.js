@@ -3,8 +3,8 @@
 let urlprefix = ""; //"/00746_EarthyIslands_Phase2/poc/butterflies"
 let urlprefix2 = ""; //urlprefix  + "/"
 
-const THREE = await import(urlprefix + "/jsm/three.orbit.module.js")
-//const { OrbitControls } = await import(urlprefix + "/jsm/OrbitControls.js")
+const THREE = await import(urlprefix + "/jsm/three.module.js")
+const { OrbitControls } = await import(urlprefix + "/jsm/OrbitControls.js")
 //const { GLTFLoader } = await import(urlprefix + "/jsm/GLTFLoader.js")
 //const Stats = await import(urlprefix + "/jsm/stats.module.js")
 //const { GUI } = await import(urlprefix + "/jsm/dat.gui.module.js")
@@ -31,7 +31,7 @@ const camera = new THREE.PerspectiveCamera(45, cWidth / cHeight, cNear, cFar);
 scene.add(camera);
 camera.position.set(0, 0, 100);
 camera.lookAt(scene.position)
-var orbitcontrols = new THREE.OrbitControls(camera, document.getElementById("canvas3d"));
+var orbitcontrols = new OrbitControls(camera, document.getElementById("canvas3d"));
 
 // SET UP RESIZE EVENT
 var tanFOV = Math.tan((Math.PI / 360) * camera.fov);
