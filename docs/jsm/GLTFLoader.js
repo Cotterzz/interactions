@@ -1,68 +1,68 @@
-import {
-	AnimationClip,
-	Bone,
-	Box3,
-	BufferAttribute,
-	BufferGeometry,
-	ClampToEdgeWrapping,
-	Color,
-	DirectionalLight,
-	DoubleSide,
-	FileLoader,
-	FrontSide,
-	Group,
-	ImageBitmapLoader,
-	InterleavedBuffer,
-	InterleavedBufferAttribute,
-	Interpolant,
-	InterpolateDiscrete,
-	InterpolateLinear,
-	Line,
-	LineBasicMaterial,
-	LineLoop,
-	LineSegments,
-	LinearFilter,
-	LinearMipmapLinearFilter,
-	LinearMipmapNearestFilter,
-	Loader,
-	LoaderUtils,
-	Material,
-	MathUtils,
-	Matrix4,
-	Mesh,
-	MeshBasicMaterial,
-	MeshPhysicalMaterial,
-	MeshStandardMaterial,
-	MirroredRepeatWrapping,
-	NearestFilter,
-	NearestMipmapLinearFilter,
-	NearestMipmapNearestFilter,
-	NumberKeyframeTrack,
-	Object3D,
-	OrthographicCamera,
-	PerspectiveCamera,
-	PointLight,
-	Points,
-	PointsMaterial,
-	PropertyBinding,
-	Quaternion,
-	QuaternionKeyframeTrack,
-	RGBFormat,
-	RepeatWrapping,
-	Skeleton,
-	SkinnedMesh,
-	Sphere,
-	SpotLight,
-	TangentSpaceNormalMap,
-	Texture,
-	TextureLoader,
-	TriangleFanDrawMode,
-	TriangleStripDrawMode,
-	Vector2,
-	Vector3,
-	VectorKeyframeTrack,
-	sRGBEncoding
-} from '/jsm/three.module.js';
+const THREE = await import(urlprefix + "jsm/three.module.js");
+
+const AnimationClip = THREE.AnimationClip;
+const Bone = THREE.Bone;
+const Box3 = THREE.Box3;
+const BufferAttribute = THREE.BufferAttribute;
+const BufferGeometry = THREE.BufferGeometry;
+const ClampToEdgeWrapping = THREE.ClampToEdgeWrapping;
+const Color = THREE.Color;
+const DirectionalLight = THREE.DirectionalLight;
+const DoubleSide = THREE.DoubleSide;
+const FileLoader = THREE.FileLoader;
+const FrontSide = THREE.FrontSide;
+const Group = THREE.Group;
+const ImageBitmapLoader = THREE.ImageBitmapLoader;
+const InterleavedBuffer = THREE.InterleavedBuffer;
+const InterleavedBufferAttribute = THREE.InterleavedBufferAttribute;
+const Interpolant = THREE.Interpolant;
+const InterpolateDiscrete = THREE.InterpolateDiscrete;
+const InterpolateLinear = THREE.InterpolateLinear;
+const Line = THREE.Line;
+const LineBasicMaterial = THREE.LineBasicMaterial;
+const LineLoop = THREE.LineLoop;
+const LineSegments = THREE.LineSegments;
+const LinearFilter = THREE.LinearFilter;
+const LinearMipmapLinearFilter = THREE.LinearMipmapLinearFilter;
+const LinearMipmapNearestFilter = THREE.LinearMipmapNearestFilter;
+const Loader = THREE.Loader;
+const LoaderUtils = THREE.LoaderUtils;
+const Material = THREE.Material;
+const MathUtils = THREE.MathUtils;
+const Matrix4 = THREE.Matrix4;
+const Mesh = THREE.Mesh;
+const MeshBasicMaterial = THREE.MeshBasicMaterial;
+const MeshPhysicalMaterial = THREE.MeshPhysicalMaterial;
+const MeshStandardMaterial = THREE.MeshStandardMaterial;
+const MirroredRepeatWrapping = THREE.MirroredRepeatWrapping;
+const NearestFilter = THREE.NearestFilter;
+const NearestMipmapLinearFilter = THREE.NearestMipmapLinearFilter;
+const NearestMipmapNearestFilter = THREE.NearestMipmapNearestFilter;
+const NumberKeyframeTrack = THREE.NumberKeyframeTrack;
+const Object3D = THREE.Object3D;
+const OrthographicCamera = THREE.OrthographicCamera;
+const PerspectiveCamera = THREE.PerspectiveCamera;
+const PointLight = THREE.PointLight;
+const Points = THREE.Points;
+const PointsMaterial = THREE.PointsMaterial;
+const PropertyBinding = THREE.PropertyBinding;
+const Quaternion = THREE.Quaternion;
+const QuaternionKeyframeTrack = THREE.QuaternionKeyframeTrack;
+const RGBFormat = THREE.RGBFormat;
+const RepeatWrapping = THREE.RepeatWrapping;
+const Skeleton = THREE.Skeleton;
+const SkinnedMesh = THREE.SkinnedMesh;
+const Sphere = THREE.Sphere;
+const SpotLight = THREE.SpotLight;
+const TangentSpaceNormalMap = THREE.TangentSpaceNormalMap;
+const Texture = THREE.Texture;
+const TextureLoader = THREE.TextureLoader;
+const TriangleFanDrawMode = THREE.TriangleFanDrawMode;
+const TriangleStripDrawMode = THREE.TriangleStripDrawMode;
+const Vector2 = THREE.Vector2;
+const Vector3 = THREE.Vector3;
+const VectorKeyframeTrack = THREE.VectorKeyframeTrack;
+const sRGBEncoding = THREE.sRGBEncoding;
 
 class GLTFLoader extends Loader {
 
