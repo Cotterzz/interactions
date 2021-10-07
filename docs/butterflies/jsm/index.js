@@ -67,10 +67,10 @@ loader.load("butterfly_body.glb", function ( gltf ) {
 let wingMesh, wingMaterial, wingGeometry, stats, gui, wingTexture;
 let leftMatrix = new THREE.Object3D();
 let rightMatrix = new THREE.Object3D();
-let butterflyCount = 1500;
+let butterflyCount = 50;
 let wingCount = butterflyCount*2;
-const accel = 0.001;
-const base_vel_limit = 0.02;
+const accel = 0.0005;
+const base_vel_limit = 0.015;
 const positions = new Array(butterflyCount);
 const velocities = new Array(butterflyCount);
 const vectors = new Array(butterflyCount);
