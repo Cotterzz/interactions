@@ -1,9 +1,14 @@
-import * as THREE from '/jsm/three.module.js'
-import { OrbitControls } from '/jsm/OrbitControls.js'
-import { FBXLoader } from '/jsm/FBXLoader.js'
-import { GLTFLoader } from '/jsm/GLTFLoader.js'
-import Stats from '/jsm/stats.module.js'
-import * as SKUTILS from '/jsm/SkeletonUtils.js'
+let urlArray = window.location.href.split("/"); urlArray.pop();
+let urlprefix = urlArray.join("/")  + "/";
+globalThis.urlprefix = urlprefix;
+console.log("URLPREFIX: " + urlprefix);
+
+const THREE = await import(urlprefix + "jsm/three.module.js");
+const { OrbitControls } = await import(urlprefix + "jsm/OrbitControls.js")
+const { GLTFLoader } = await import(urlprefix + "jsm/GLTFLoader.js")
+const { FBXLoader } = await import(urlprefix + "jsm/FBXLoader.js")
+const  SKUTILS  = await import(urlprefix + "jsm/SkeletonUtils.js")
+const Stats = await import(urlprefix + "jsm/stats.module.js")
 
 const scene = new THREE.Scene()
 //scene.add(new THREE.AxesHelper(5))
@@ -43,7 +48,7 @@ let mixer;
 
 const fbxLoader = new FBXLoader()
 fbxLoader.load(
-    'coral.fbx',
+urlprefix + 'coral/coral.fbx',
     (object) => {
 
         //if ((child as THREE.Mesh).isMesh) {
@@ -109,8 +114,8 @@ function onWindowResize(event) {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.render(scene, camera);
 }
-const stats = Stats()
-document.body.appendChild(stats.dom)
+//const stats = Stats()
+//document.body.appendChild(stats.dom)
 
 function animate() {
     requestAnimationFrame(animate)
@@ -121,7 +126,7 @@ function animate() {
 
     render()
 
-    stats.update()
+    //stats.update()
 }
 
 function render() {
