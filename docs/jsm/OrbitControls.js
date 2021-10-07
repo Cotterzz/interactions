@@ -913,7 +913,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 			switch ( mouseAction ) {
 
-				case MOUSE.DOLLY:
+				case THREE.MOUSE.DOLLY:
 
 					if ( scope.enableZoom === false ) return;
 
@@ -923,7 +923,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 					break;
 
-				case MOUSE.ROTATE:
+				case THREE.MOUSE.ROTATE:
 
 					if ( event.ctrlKey || event.metaKey || event.shiftKey ) {
 
@@ -945,7 +945,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 					break;
 
-				case MOUSE.PAN:
+				case THREE.MOUSE.PAN:
 
 					if ( event.ctrlKey || event.metaKey || event.shiftKey ) {
 
@@ -1057,7 +1057,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 					switch ( scope.touches.ONE ) {
 
-						case TOUCH.ROTATE:
+						case THREE.TOUCH.ROTATE:
 
 							if ( scope.enableRotate === false ) return;
 
@@ -1067,7 +1067,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 							break;
 
-						case TOUCH.PAN:
+						case THREE.TOUCH.PAN:
 
 							if ( scope.enablePan === false ) return;
 
@@ -1089,7 +1089,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 					switch ( scope.touches.TWO ) {
 
-						case TOUCH.DOLLY_PAN:
+						case THREE.TOUCH.DOLLY_PAN:
 
 							if ( scope.enableZoom === false && scope.enablePan === false ) return;
 
@@ -1099,7 +1099,7 @@ class OrbitControls extends THREE.EventDispatcher {
 
 							break;
 
-						case TOUCH.DOLLY_ROTATE:
+						case THREE.TOUCH.DOLLY_ROTATE:
 
 							if ( scope.enableZoom === false && scope.enableRotate === false ) return;
 
@@ -1282,11 +1282,11 @@ class MapControls extends OrbitControls {
 
 		this.screenSpacePanning = false; // pan orthogonal to world-space direction camera.up
 
-		this.mouseButtons.LEFT = MOUSE.PAN;
-		this.mouseButtons.RIGHT = MOUSE.ROTATE;
+		this.mouseButtons.LEFT = THREE.MOUSE.PAN;
+		this.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
 
-		this.touches.ONE = TOUCH.PAN;
-		this.touches.TWO = TOUCH.DOLLY_ROTATE;
+		this.touches.ONE = THREE.TOUCH.PAN;
+		this.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
 
 	}
 
