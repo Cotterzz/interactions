@@ -1,17 +1,17 @@
-import {
-	AnimationClip,
-	AnimationMixer,
-	Euler,
-	Matrix4,
-	Quaternion,
-	QuaternionKeyframeTrack,
-	SkeletonHelper,
-	Vector2,
-	Vector3,
-	VectorKeyframeTrack
-} from '/jsm/three.module.js';
 
 
+const THREE = await import(urlprefix + "jsm/three.module.js");
+const Vector3 = THREE.Vector3;
+const Vector4 = THREE.Vector4;
+const Curve = THREE.Curve;
+const AnimationClip = THREE.AnimationClip
+const AnimationMixer = THREE.AnimationMixer
+const Euler = THREE.Euler
+const Matrix4 = THREE.Matrix4
+const Quaternion = THREE.Quaternion
+const QuaternionKeyframeTrack = THREE.QuaternionKeyframeTrack
+const SkeletonHelper = THREE.SkeletonHelper
+const VectorKeyframeTrack = THREE.VectorKeyframeTrack
 function retarget( target, source, options = {} ) {
 
 	const pos = new Vector3(),
