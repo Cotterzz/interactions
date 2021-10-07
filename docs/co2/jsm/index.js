@@ -44,7 +44,7 @@ let mixer;
 
 const gLoader = new GLTFLoader().setPath( "model/" );
 gLoader.load(
-    'co2whole.gltf',
+    'scene.glb',
     (object) => {
     	console.log(object);
         //if ((child as THREE.Mesh).isMesh) {
