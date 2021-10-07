@@ -59,7 +59,7 @@ gLoader.load(
         //         }
             // }
         //});
-       object.scale.set(.2, .2, .2);
+        container.scale.set(.2, .2, .2);
         
         
         container.add(object.scenes[0]);
