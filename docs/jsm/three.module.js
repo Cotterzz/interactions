@@ -43337,7 +43337,7 @@ class PropertyBinding {
 
 		if ( ! matches ) {
 
-			throw new Error( 'PropertyBinding: Cannot parse trackName: ' + trackName );
+			throw new Error( 'PropertyBinding: Cannot parse trackName: ' + trackName + " from " + _trackRe);
 
 		}
 

@@ -891,7 +891,7 @@ class OrbitControls extends THREE.EventDispatcher {
 			switch ( event.button ) {
 
 				case 0:
-
+					globalThis.action = true;
 					mouseAction = scope.mouseButtons.LEFT;
 					break;
 
