@@ -60,17 +60,7 @@ function loadFBXClones(){
         worms[counter].rotation.y = Math.random()*6;
         worms[counter].traverse(function (child) {
             if(child.animations.length>0){
-                child.animations[0].name= "scene" + counter;
-                console.log(child.animations[0]);
-               
-                    for ( let t = 0; t < child.animations[0].tracks.length; t ++ ) {
-                    //child.animations[0].tracks[t].name = child.animations[0].name + "track" +t;
-                    //child.animations[0].tracks[t].name = child.animations[0].name +child.animations[0].tracks[t].name
-                }
-                
-                
-                //mixer.clipAction( child.animations[0]).play();
-                mixers[counter] = new THREE.AnimationMixer( object );
+                mixers[counter] = new THREE.AnimationMixer( worms[counter] );
                 mixers[counter].clipAction( child.animations[0] ).play();
             }
         });
