@@ -32,8 +32,10 @@ controls.enableDamping = true
 controls.target.set(0, 1, -3)
 
 let worm;
-let count = 15;
+let count = 150;
+let spread = 10;
 let worms = new Array(count);
+let speeds = new Array(count);
 const clock = new THREE.Clock();
 let mixer = new THREE.AnimationMixer( scene ); // ORIGINAL
 let originalAnimation;
@@ -60,13 +62,10 @@ fbxLoader.load(
 
         // CLONES
         for ( let p = 0; p < count; p ++ ) {
-            //console.log(p);
-            //console.log(SKUTILS);
-            //console.log(SKUTILS.clone);
-            //console.log(worm);
             worms[p] = SKUTILS.clone(worm);
+            speeds[p] = 0.5 + Math.random();
             scene.add(worms[p]);
-            worms[p].position.set((Math.random()*2)-1, 0, Math.random()*-2);
+            worms[p].position.set((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
             worms[p].rotation.y = Math.random()*6;
             worms[p].traverse(function (child) {
                 if(child.name == "animatedGroup"){
@@ -108,7 +107,7 @@ if(globalThis.action){
     mixer.update(d); // ORIGINAL
 
     for ( let p = 0; p < count; p ++ ) {
-        mixers[p].update(d); // CLONES
+        mixers[p].update(d*speeds[p]); // CLONES
     }
 }
     controls.update()
