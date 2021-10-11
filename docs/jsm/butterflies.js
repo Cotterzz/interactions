@@ -7,6 +7,7 @@ console.log("URLPREFIX: " + urlprefix);
 
 const THREE = await import(urlprefix + "jsm/three.module.js");
 const { OrbitControls } = await import(urlprefix + "jsm/OrbitControls.js")
+const { FBXLoader } = await import(urlprefix + "jsm/FBXLoader.js")
 //const { GLTFLoader } = await import(urlprefix + "/jsm/GLTFLoader.js")
 //const Stats = await import(urlprefix + "/jsm/stats.module.js")
 //const { GUI } = await import(urlprefix + "/jsm/dat.gui.module.js")
@@ -50,7 +51,8 @@ light2.position.set(0, 2000, 0);
 scene.add(light2);
 
 let gLoaded = false;
-let iLoaded = true;
+let iLoaded = false;
+let mLoaded = false;
 let wingImage = null;
 
 /*// LOAD WING GLTF
@@ -66,11 +68,18 @@ loader.load("butterfly_body.glb", function ( gltf ) {
     //gltf.scene.scale.x = gltf.scene.scale.y = gltf.scene.scale.z =20;
     //scene.add(gltf.scene);
 } );*/
-let wingMesh, wingMaterial, wingGeometry, stats, gui, wingTexture;
+let spread = 20;
+let bspread = 4;
+let mustard, wingMesh, wingMaterial, wingGeometry, stats, gui, wingTexture;
 let leftMatrix = new THREE.Object3D();
 let rightMatrix = new THREE.Object3D();
 let butterflyCount = 50;
+let mustardCount = 20;
+let mustards = new Array(mustardCount);
 let wingCount = butterflyCount*2;
+let minscale = 1;
+let maxscale = 3;
+let basescale = 30;
 const accel = 0.0005;
 const base_vel_limit = 0.015;
 const positions = new Array(butterflyCount);
@@ -84,7 +93,8 @@ const wingSpeeds = new Array(butterflyCount);
 const wingMin = -1.5;
 const wingMax = 0.2;
 for ( let p = 0; p < butterflyCount; p ++ ) {
-    positions[p] = {x:2*(Math.random()-0.5), y:2*(Math.random()-0.5), z:2*(Math.random()-0.5)}
+    positions[p] = {x:(Math.random()*bspread)-(bspread/2), y:(Math.random()*bspread)+(bspread/2), z:Math.random()*(-bspread)}
+   // ((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
     if(p===0){ targets[p] = butterflyCount-1;} else if (p===1){targets[p]=0} else {
         targets[p] = Math.floor(Math.random()*p);
     }
@@ -98,24 +108,55 @@ for ( let p = 0; p < butterflyCount; p ++ ) {
 const geomLoader = new THREE.BufferGeometryLoader();
 const imageLoader = new THREE.TextureLoader();
 
+const fbxLoader = new FBXLoader()
+fbxLoader.load(
+    urlprefix + 'butterflies/mustard.fbx',
+    (object) => {
 
+        // ORIGINAL
+        //object.scale.set(30.3, 30.3, 30.3);
+        mustard = object;
+        //scene.add(mustard);
+        mustard.traverse(function (child) {
+        });
 
-//function loadGeometry(){
-    
+        // CLONES
+        for ( let m = 0; m < mustardCount; m ++ ) {
+            mustards[m] = mustard.clone();
+            scene.add(mustards[m]);
+            let scale = minscale + (Math.random()*(maxscale-minscale));
+            mustards[m].scale.set(basescale*scale, basescale*scale, basescale*scale);
+            mustards[m].position.set((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
+            mustards[m].rotation.y = Math.random()*6;
+            mustards[m].traverse(function (child) {
+               
+            });
+        }
+        mLoaded = true;
+        loadImage();
+    },
+    (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+    },
+    (error) => {
+        console.log(error)
+    }
+)
 
-
-    // ADD FPS COUNTER
-    //stats = new Stats.default();
-    //document.body.appendChild( stats.dom );
-
-    // START ANIMATION
-    animate();
-//}
-
-imageLoader.load( urlprefix + 'butterflies/wing.jpg',
+function loadImage(){
+	imageLoader.load( urlprefix + 'butterflies/wing.jpg',
     function ( image ) {
         wingImage = image;
-        geomLoader.load( urlprefix + 'butterflies/wing_geometry.json', function ( geometry ) {
+
+        console.log(wingImage);
+        iLoaded=true;
+        loadGeometry();
+    }, null, null
+	);
+}
+
+function loadGeometry(){
+	    geomLoader.load( urlprefix + 'butterflies/wing_geometry.json', function ( geometry ) {
         wingGeometry = geometry.translate ( -0.7, 0, 0 ) ;
     
         wingGeometry.computeVertexNormals();
@@ -127,17 +168,20 @@ imageLoader.load( urlprefix + 'butterflies/wing.jpg',
         //gui = new GUI();
         //gui.add( wingMesh, 'count', 0, wingCount );
         gLoaded=true;
+        animate();
     } );
-        console.log(wingImage);
-        iLoaded=true;
-    }, null, null
-);
+}
+
+
+
+
+
 
 function animate(){
     requestAnimationFrame(() => { animate() } );
 
-    if ( iLoaded&&gLoaded ) {
-
+    if ( iLoaded&&gLoaded&&mLoaded ) {
+    	console.log("animate")
         const time = Date.now() * 0.001;
         //wingMesh.rotation.x = Math.sin( time / 4 );
         //wingMesh.rotation.y = Math.sin( time / 2 );
