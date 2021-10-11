@@ -50,24 +50,18 @@ var light2 = new THREE.DirectionalLight("#ffffff",2);
 light2.position.set(0, 2000, 0);
 scene.add(light2);
 
+let targetObject = new THREE.Object3D();
+scene.add(targetObject);
+
 let gLoaded = false;
 let iLoaded = false;
 let mLoaded = false;
 let wingImage = null;
 
-/*// LOAD WING GLTF
-var loader = new GLTFLoader().setPath( "/models/" );
-loader.load("butterfly_wing_flat.glb", function ( gltf ) {
-    //gltf.scene.scale.x = gltf.scene.scale.y = gltf.scene.scale.z =20;
-    //scene.add(gltf.scene);
-} );
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2( 1, 1 );
+document.addEventListener( 'mousemove', onMouseMove );
 
-// LOAD BODY GLTF
-var loader = new GLTFLoader().setPath( "/models/" );
-loader.load("butterfly_body.glb", function ( gltf ) {
-    //gltf.scene.scale.x = gltf.scene.scale.y = gltf.scene.scale.z =20;
-    //scene.add(gltf.scene);
-} );*/
 let spread = 20;
 let bspread = 4;
 let mustard, wingMesh, wingMaterial, wingGeometry, stats, gui, wingTexture;
@@ -129,7 +123,9 @@ fbxLoader.load(
             mustards[m].position.set((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
             mustards[m].rotation.y = Math.random()*6;
             mustards[m].traverse(function (child) {
-               
+                    if ( child instanceof THREE.Mesh ) {
+                        child.mustardID = m;
+                    }
             });
         }
         mLoaded = true;
@@ -194,12 +190,21 @@ function animate(){
             positions[i].y += velocities[i].y;
             positions[i].z += velocities[i].z;
             
-                if (positions[i].x < positions[targets[i]].x) {velocities[i].x += accel}
-                if (positions[i].x > positions[targets[i]].x) {velocities[i].x -= accel}
-                if (positions[i].y < positions[targets[i]].y) {velocities[i].y += accel}
-                if (positions[i].y > positions[targets[i]].y) {velocities[i].y -= accel}
-                if (positions[i].z < positions[targets[i]].z) {velocities[i].z += accel}
-                if (positions[i].z > positions[targets[i]].z) {velocities[i].z -= accel}
+
+            let target;
+
+            if(i==0){
+            	target = targetObject.position
+            } else {
+            	target = positions[targets[i]];
+            }
+
+            if (positions[i].x < target.x) {velocities[i].x += accel}
+                if (positions[i].x > target.x) {velocities[i].x -= accel}
+                if (positions[i].y < target.y) {velocities[i].y += accel}
+                if (positions[i].y > target.y) {velocities[i].y -= accel}
+                if (positions[i].z < target.z) {velocities[i].z += accel}
+                if (positions[i].z > target.z) {velocities[i].z -= accel}
 
             velocities[i].x += (Math.random()*0.004) - 0.002;
             velocities[i].y += (Math.random()*0.004) - 0.002;
@@ -246,11 +251,38 @@ function animate(){
 
         wingMesh.instanceMatrix.needsUpdate = true;
 
+                            raycaster.setFromCamera( mouse, camera );
+
+                const intersection = raycaster.intersectObject( scene );
+
+                if ( intersection.length > 0 ) {
+
+                    
+                    let targetTo = intersection[ 0 ].object.parent
+                    console.log(targetTo);
+                    targetObject.position.x = targetTo.x;
+                    targetObject.position.y = targetTo.y;
+                    targetObject.position.z = targetTo.z;
+
+                    //mesh.setColorAt( instanceId, color.setHex( Math.random() * 0xffffff ) );
+                    //mesh.instanceColor.needsUpdate = true;
+
+                }
+
     }
 
     renderer.render(scene, camera);
     //stats.update();
 }
+
+function onMouseMove( event ) {
+
+                event.preventDefault();
+
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            }
 
 function onWindowResize(event) {
         camera.aspect = window.innerWidth / window.innerHeight;
