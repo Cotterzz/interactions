@@ -42,7 +42,9 @@ controls.target.set(0, 1, 0)
 let container = new THREE.Mesh();
 scene.add(container);
 let count = 15;
-let worms = new Array(count);
+let velocities = new Array(count);
+let spins = new Array(count);
+let molecules = new Array(count);
 let animations = new Array(count)
 
 let mixer;
@@ -52,23 +54,17 @@ gLoader.load(
     'co2/scene.glb',
     (object) => {
     	console.log(object);
-        //if ((child as THREE.Mesh).isMesh) {
-        //         // (child as THREE.Mesh).material = material
-        //         if ((child as THREE.Mesh).material) {
-        //             ((child as THREE.Mesh).material as THREE.MeshBasicMaterial).transparent = false
-        //         }
-            // }
-        //});
         container.scale.set(.2, .2, .2);
-        
         
         container.add(object.scenes[0]);
         
         for ( let p = 0; p < count; p ++ ) {
-            worms[p] = container.clone();
-            scene.add(worms[p]);
-            worms[p].position.set((Math.random()*5)-2.5, 0, Math.random()*-5);
-            worms[p].rotation.y = Math.random()*6;
+            molecules[p] = container.clone();
+            velocities[p] = {x:0, y:0, z:0};
+            spins[p] = Math.random()*0.101;
+            scene.add(molecules[p]);
+            molecules[p].position.set((Math.random()*5)-2.5, 0, Math.random()*-5);
+            molecules[p].rotation.y = Math.random()*6;
             
         }
         animate();
@@ -99,6 +95,11 @@ function onWindowResize(event) {
 //document.body.appendChild(stats.dom)
 
 function animate() {
+
+    for ( let p = 0; p < count; p ++ ) {
+        molecules[p].rotation.y += spins[p];
+    }
+
     requestAnimationFrame(animate)
 
     controls.update()
