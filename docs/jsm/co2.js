@@ -91,12 +91,12 @@ iLoader.load( imgURL,
         }
 
         seethroughgeometry = new THREE.CylinderGeometry( hspread*1.65, hspread*1.65, vspread*2.25, 32 );
-        seethroughmaterial = new THREE.MeshBasicMaterial( {color: 0x442211, map:barkImage, transparent:true, opacity:0.5} );
+        seethroughmaterial = new THREE.MeshBasicMaterial( { map:barkImage, transparent:true, opacity:0.5} );
         seethroughcylinder = new THREE.Mesh( seethroughgeometry, seethroughmaterial );
         scene.add( seethroughcylinder );
 
         outergeometry = new THREE.CylinderGeometry( hspread*1.7, hspread*1.7, vspread*2.3, 32 );
-        outermaterial = new THREE.MeshBasicMaterial( {color: 0x442211, map:barkImage} );
+        outermaterial = new THREE.MeshBasicMaterial( { map:barkImage} );
         outercylinder = new THREE.Mesh( outergeometry, outermaterial );
         scene.add( outercylinder );
         animate();
