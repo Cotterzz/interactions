@@ -41,11 +41,12 @@ controls.target.set(0, 1, 0)
 
 let container = new THREE.Mesh();
 scene.add(container);
-let count = 15;
+let count = 150;
+let spread  = 4;
 let velocities = new Array(count);
 let spins = new Array(count);
 let molecules = new Array(count);
-let animations = new Array(count)
+let animations = new Array(count);
 
 let mixer;
 
@@ -60,10 +61,10 @@ gLoader.load(
         
         for ( let p = 0; p < count; p ++ ) {
             molecules[p] = container.clone();
-            velocities[p] = {x:0, y:0, z:0};
-            spins[p] = Math.random()*0.101;
+            velocities[p] = {x:0.05 - Math.random()*0.1, y:0.05 - Math.random()*0.1, z:0.05 - Math.random()*0.1};
+            spins[p] = 0.05 + Math.random()*0.05;
             scene.add(molecules[p]);
-            molecules[p].position.set((Math.random()*5)-2.5, 0, Math.random()*-5);
+            molecules[p].position.set((Math.random()*spread*2)-spread, (Math.random()*spread*2)-spread, (Math.random()*spread*2)-spread);
             molecules[p].rotation.y = Math.random()*6;
             
         }
@@ -98,6 +99,16 @@ function animate() {
 
     for ( let p = 0; p < count; p ++ ) {
         molecules[p].rotation.y += spins[p];
+        molecules[p].position.x += velocities[p].x;
+        molecules[p].position.y += velocities[p].y;
+        molecules[p].position.z += velocities[p].z;
+
+        if(molecules[p].position.x>spread){molecules[p].position.x=spread; velocities[p].x = -velocities[p].x;}
+        if(molecules[p].position.x<-spread){molecules[p].position.x=-spread; velocities[p].x = -velocities[p].x;}
+        if(molecules[p].position.y>spread){molecules[p].position.y=spread; velocities[p].y = -velocities[p].y;}
+        if(molecules[p].position.y<-spread){molecules[p].position.y=-spread; velocities[p].y = -velocities[p].y;}
+        if(molecules[p].position.z>spread){molecules[p].position.z=spread; velocities[p].z = -velocities[p].z;}
+        if(molecules[p].position.z<-spread){molecules[p].position.z=-spread; velocities[p].z = -velocities[p].z;}
     }
 
     requestAnimationFrame(animate)
