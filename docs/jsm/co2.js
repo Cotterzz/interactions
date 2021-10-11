@@ -45,10 +45,10 @@ controls.target.set(0, 1, 0)
 
 let container = new THREE.Mesh();
 let barkImage;
-scene.add(container);
-let count = 150;
-let hspread  = 2;
-let vspread  = 6;
+//scene.add(container);
+let count = 50;
+let hspread  = 3;
+let vspread  = 7;
 let velocities = new Array(count);
 let spins = new Array(count);
 let molecules = new Array(count);
@@ -76,7 +76,7 @@ iLoader.load( imgURL,
     'co2/scene.glb',
     (object) => {
         console.log(object);
-        container.scale.set(.2, .2, .2);
+        container.scale.set(.5, .5, .5);
         
         container.add(object.scenes[0]);
         
