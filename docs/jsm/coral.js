@@ -20,6 +20,8 @@ scene.add(light)
 const ambientLight = new THREE.AmbientLight()
 scene.add(ambientLight)
 const cNear = 1;
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2( 1, 1 );
 const cFar = 100000;
 const camera = new THREE.PerspectiveCamera(
     75,
@@ -27,8 +29,8 @@ const camera = new THREE.PerspectiveCamera(
     cNear,
     cFar
 )
-camera.position.set(0.8, 1.4, 1.0)
-
+camera.position.set(0, 3, 10.0)
+document.addEventListener( 'mousemove', onMouseMove );
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("canvas3d"),antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight)
 
@@ -42,6 +44,8 @@ controls.target.set(0, 1, 0)
 let coral;
 let count = 100;
 let corals = new Array(count);
+let colours = new Array(count);
+let interacted = new Array(count)
 let materials = new Array(count);
 let spread = 20;
 let minscale = 1;
@@ -54,7 +58,7 @@ urlprefix + 'coral/coral3.fbx',
     (object) => {
         
         coral = object;
-        scene.add(coral);
+        //scene.add(coral);
         const bleachedColor = Math.random();
         const bleachedRGBColor = new THREE.Color( 1, bleachedColor, bleachedColor );
 
@@ -84,16 +88,19 @@ urlprefix + 'coral/coral3.fbx',
             corals[p] = coral.clone();
             //console.log(corals[p])
             scene.add(corals[p]);
+            interacted[p] = false;
             corals[p].position.set((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
             corals[p].rotation.y = Math.random()*6;
             let scale = minscale + (Math.random()*(maxscale-minscale));
             corals[p].scale.set(basescale*scale, basescale*scale, basescale*scale);
             materials[p] = new THREE.MeshPhongMaterial();
-            materials[p].color = new THREE.Color( Math.random(), Math.random(), Math.random() );
+            colours[p] = new THREE.Color( Math.random(), Math.random(), Math.random() );
+            let bleachedColorLevel = (colours[p].r + colours[p].g + colours[p].b)/3;
+            materials[p].color = new THREE.Color(bleachedColorLevel, bleachedColorLevel, bleachedColorLevel );
             corals[p].traverse(function (child) {
                if(p==0){console.log(child);}
                 if ( child instanceof THREE.Mesh ) {
-                        
+                        child.coralID = p;
                         child.material = materials[p];
                         
                         
@@ -123,6 +130,14 @@ function onWindowResize(event) {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.render(scene, camera);
 }
+function onMouseMove( event ) {
+
+                event.preventDefault();
+
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            }
 //const stats = Stats()
 //document.body.appendChild(stats.dom)
 
@@ -131,7 +146,32 @@ function animate() {
 
     controls.update()
 
+                    raycaster.setFromCamera( mouse, camera );
+
+                const intersection = raycaster.intersectObject( scene );
+
+                if ( intersection.length > 0 ) {
+
+                    //console.log(intersection[ 0 ].object.coralID);
+
+                    interacted[intersection[ 0 ].object.coralID] = true;
+                    //mesh.setColorAt( instanceId, color.setHex( Math.random() * 0xffffff ) );
+                    //mesh.instanceColor.needsUpdate = true;
+
+                }
+
     render()
+
+   //if(globalThis.action){
+       for ( let p = 0; p < count; p ++ ) {
+        if(interacted[p]){
+             materials[p].color.r = materials[p].color.r + (colours[p].r-materials[p].color.r)/100;
+             materials[p].color.g = materials[p].color.g + (colours[p].g-materials[p].color.g)/100;
+             materials[p].color.b = materials[p].color.b + (colours[p].b-materials[p].color.b)/100;          
+        }
+
+       }
+   //}
 
     //stats.update()
 }
