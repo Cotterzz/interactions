@@ -27,7 +27,7 @@ const camera = new THREE.PerspectiveCamera(
     cNear,
     cFar
 )
-camera.position.set(0.8, 1.4, 1.0)
+camera.position.set(0, 4, 15)
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("canvas3d"),antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -42,7 +42,8 @@ controls.target.set(0, 1, 0)
 let container = new THREE.Mesh();
 scene.add(container);
 let count = 150;
-let spread  = 4;
+let hspread  = 2;
+let vspread  = 6;
 let velocities = new Array(count);
 let spins = new Array(count);
 let molecules = new Array(count);
@@ -64,7 +65,7 @@ gLoader.load(
             velocities[p] = {x:0.05 - Math.random()*0.1, y:0.05 - Math.random()*0.1, z:0.05 - Math.random()*0.1};
             spins[p] = 0.05 + Math.random()*0.05;
             scene.add(molecules[p]);
-            molecules[p].position.set((Math.random()*spread*2)-spread, (Math.random()*spread*2)-spread, (Math.random()*spread*2)-spread);
+            molecules[p].position.set((Math.random()*hspread*2)-hspread, (Math.random()*vspread*2)-vspread, (Math.random()*hspread*2)-hspread);
             molecules[p].rotation.y = Math.random()*6;
             
         }
@@ -103,12 +104,12 @@ function animate() {
         molecules[p].position.y += velocities[p].y;
         molecules[p].position.z += velocities[p].z;
 
-        if(molecules[p].position.x>spread){molecules[p].position.x=spread; velocities[p].x = -velocities[p].x;}
-        if(molecules[p].position.x<-spread){molecules[p].position.x=-spread; velocities[p].x = -velocities[p].x;}
-        if(molecules[p].position.y>spread){molecules[p].position.y=spread; velocities[p].y = -velocities[p].y;}
-        if(molecules[p].position.y<-spread){molecules[p].position.y=-spread; velocities[p].y = -velocities[p].y;}
-        if(molecules[p].position.z>spread){molecules[p].position.z=spread; velocities[p].z = -velocities[p].z;}
-        if(molecules[p].position.z<-spread){molecules[p].position.z=-spread; velocities[p].z = -velocities[p].z;}
+        if(molecules[p].position.x>hspread){molecules[p].position.x=hspread; velocities[p].x = -velocities[p].x;}
+        if(molecules[p].position.x<-hspread){molecules[p].position.x=-hspread; velocities[p].x = -velocities[p].x;}
+        if(molecules[p].position.y>vspread){molecules[p].position.y=vspread; velocities[p].y = -velocities[p].y;}
+        if(molecules[p].position.y<-vspread){molecules[p].position.y=-vspread; velocities[p].y = -velocities[p].y;}
+        if(molecules[p].position.z>hspread){molecules[p].position.z=hspread; velocities[p].z = -velocities[p].z;}
+        if(molecules[p].position.z<-hspread){molecules[p].position.z=-hspread; velocities[p].z = -velocities[p].z;}
     }
 
     requestAnimationFrame(animate)

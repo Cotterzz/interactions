@@ -22,7 +22,7 @@ scene.add(ambientLight)
 const cNear = 1;
 const cFar = 100000;
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight,cNear,cFar);
-camera.position.set(0, .5, 0)
+camera.position.set(0, 5, 5)
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("canvas3d"),antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -32,7 +32,7 @@ controls.enableDamping = true
 controls.target.set(0, 1, -3)
 
 let worm;
-let count = 150;
+let count = 50;
 let spread = 10;
 let worms = new Array(count);
 let speeds = new Array(count);
@@ -41,15 +41,22 @@ let mixer = new THREE.AnimationMixer( scene ); // ORIGINAL
 let originalAnimation;
 let mixers = new Array(count);  // CLONES
 
+const geometry = new THREE.PlaneGeometry( spread*1.3, spread*1.3 );
+const material = new THREE.MeshBasicMaterial( {color: 0x442211, side: THREE.DoubleSide} );
+const plane = new THREE.Mesh( geometry, material );
+plane.rotation.x = 1.57;
+plane.position.z = spread/-2;
+scene.add( plane );
+
 const fbxLoader = new FBXLoader()
 fbxLoader.load(
     urlprefix + 'worms/worm_dive.fbx',
     (object) => {
 
         // ORIGINAL
-        object.scale.set(.2, .2, .2);
+        object.scale.set(.3, .3, .3);
         worm = object;
-        scene.add(worm);
+        //scene.add(worm);
         worm.traverse(function (child) {
             if(child.animations.length>0){
                 console.log(child);
@@ -71,7 +78,10 @@ fbxLoader.load(
                 if(child.name == "animatedGroup"){
                     child.animations[0] = originalAnimation.clone();
                     mixers[p] = new THREE.AnimationMixer( worms[p] );
-                    mixers[p].clipAction( originalAnimation.clone() ).play();
+                    let action  = mixers[p].clipAction( originalAnimation.clone() );
+                    action.clampWhenFinished = true;
+                    action.loop = THREE.LoopOnce;
+                    action.play()
                 }
             });
         }
@@ -108,6 +118,7 @@ if(globalThis.action){
 
     for ( let p = 0; p < count; p ++ ) {
         mixers[p].update(d*speeds[p]); // CLONES
+        if(p==3){console.log(mixers[p].time)}
     }
 }
     controls.update()
