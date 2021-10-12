@@ -32,14 +32,20 @@ controls.enableDamping = true
 controls.target.set(0, 1, -3)
 
 let worm;
+let focusedWorm;
 let count = 50;
 let spread = 10;
 let worms = new Array(count);
 let speeds = new Array(count);
+let actions = new Array(count);
 const clock = new THREE.Clock();
 let mixer = new THREE.AnimationMixer( scene ); // ORIGINAL
 let originalAnimation;
 let mixers = new Array(count);  // CLONES
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2( 1, 1 );
+document.addEventListener( 'mousemove', onMouseMove );
 
 const geometry = new THREE.PlaneGeometry( spread*1.3, spread*1.3 );
 const material = new THREE.MeshBasicMaterial( {color: 0x442211, side: THREE.DoubleSide} );
@@ -78,10 +84,11 @@ fbxLoader.load(
                 if(child.name == "animatedGroup"){
                     child.animations[0] = originalAnimation.clone();
                     mixers[p] = new THREE.AnimationMixer( worms[p] );
-                    let action  = mixers[p].clipAction( originalAnimation.clone() );
-                    action.clampWhenFinished = true;
-                    action.loop = THREE.LoopOnce;
-                    action.play()
+                    child.wormID = p;
+                    actions[p] = mixers[p].clipAction( originalAnimation.clone() );
+                    actions[p].clampWhenFinished = true;
+                    actions[p].loop = THREE.LoopOnce;
+                    //actions[p].play();
                 }
             });
         }
@@ -111,22 +118,43 @@ function onWindowResize(event) {
 //document.body.appendChild(stats.dom)
 
 function animate() {
-
-if(globalThis.action){
-    const d = clock.getDelta();
-    mixer.update(d); // ORIGINAL
-
-    for ( let p = 0; p < count; p ++ ) {
-        mixers[p].update(d*speeds[p]); // CLONES
-        if(p==3){console.log(mixers[p].time)}
+    focusedWorm = -1;
+    raycaster.setFromCamera( mouse, camera );
+    const intersection = raycaster.intersectObject( scene );
+    if ( intersection.length > 0 ) {
+        if(intersection[ 0 ].object.parent.wormID){
+            focusedWorm=intersection[ 0 ].object.parent.wormID;
+            actions[focusedWorm].play();
+        }
     }
-}
+
+    //if(focusedWorm>-1){
+        const d = clock.getDelta();
+        //mixer.update(d); // ORIGINAL
+
+        for ( let p = 0; p < count; p ++ ) {
+          mixers[p].update(d*speeds[p]); // CLONES
+          
+        }
+        //mixers[focusedWorm].update(d*speeds[focusedWorm]);
+    //}
     controls.update()
     //stats.update()
     render()
     requestAnimationFrame(animate)
 }
 
+function onMouseMove( event ) {
+
+                event.preventDefault();
+
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            }
+
 function render() {
     renderer.render(scene, camera)
+
+    
 }
