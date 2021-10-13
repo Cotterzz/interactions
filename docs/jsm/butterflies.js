@@ -32,7 +32,7 @@ const cFar = 100000;
 const camera = new THREE.PerspectiveCamera(45, cWidth / cHeight, cNear, cFar);
 //const camera = new THREE.OrthographicCamera( cWidth / - 2, cWidth / 2, cHeight / 2, cHeight / - 2, cNear, cFar );
 scene.add(camera);
-camera.position.set(0, 0, 100);
+camera.position.set(0, 1, 10);
 camera.lookAt(scene.position)
 var orbitcontrols = new OrbitControls(camera, document.getElementById("canvas3d"));
 
@@ -62,13 +62,13 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2( 1, 1 );
 document.addEventListener( 'mousemove', onMouseMove );
 
-let spread = 20;
+let spread = 1;
 let bspread = 4;
 let mustard, wingMesh, wingMaterial, wingGeometry, stats, gui, wingTexture;
 let leftMatrix = new THREE.Object3D();
 let rightMatrix = new THREE.Object3D();
-let butterflyCount = 50;
-let mustardCount = 20;
+let butterflyCount = 30;
+let mustardCount = 1;
 let mustards = new Array(mustardCount);
 let wingCount = butterflyCount*2;
 let minscale = 1;
@@ -96,7 +96,7 @@ for ( let p = 0; p < butterflyCount; p ++ ) {
 
     wingRotations[p] = wingMin + (Math.random()*(wingMax-wingMin))
 
-    wingSpeeds[p] = 0.2 + (Math.random()*0.2);
+    wingSpeeds[p] = 0.1 + (Math.random()*0.5);
 }
 
 const geomLoader = new THREE.BufferGeometryLoader();
@@ -251,8 +251,8 @@ function animate(){
 
         wingMesh.instanceMatrix.needsUpdate = true;
 
-                            raycaster.setFromCamera( mouse, camera );
-
+                raycaster.setFromCamera( mouse, camera );
+           
                 const intersection = raycaster.intersectObject( scene );
 
                 if ( intersection.length > 0 ) {
