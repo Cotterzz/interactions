@@ -56,7 +56,7 @@ let corals = new Array(count);
 let colours = new Array(count);
 let interacted = new Array(count)
 let materials = new Array(count);
-let spread = 30;
+let spread = 20;
 let minscale = 1;
 let maxscale = 3;
 let basescale = 0.01;
@@ -73,6 +73,9 @@ function loadImage(){
     imageLoader.load( urlprefix + 'coral/height.png',
     function ( image ) {
         heightmap = image;
+        heightmap.wrapS = THREE.RepeatWrapping;
+        heightmap.wrapT = THREE.RepeatWrapping;
+        heightmap.repeat.set( 3, 3);
         coral2geo = new THREE.SphereGeometry(15, 128, 64);
         coral2mat = new THREE.MeshStandardMaterial( {
                                 //map: imgTexture,
@@ -126,7 +129,7 @@ function loadGeometry(){
         
         for ( let p = 0; p < count; p ++ ) {
             //corals[p] = SKUTILS.clone(coral);
-            if(Math.random()>0.3){
+            if(Math.random()>0.2){
                 corals[p] = coral.clone();
                 materials[p] = new THREE.MeshPhongMaterial();
                 let scale = minscale + (Math.random()*(maxscale-minscale));
