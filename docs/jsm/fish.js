@@ -27,7 +27,14 @@ const camera = new THREE.PerspectiveCamera(
     cNear,
     cFar
 )
-camera.position.set(0.8, 1.4, 1.0)
+camera.position.set(0.8, 1.4, 1.0);
+
+
+    const near = 1;
+    const far = 5;
+    const color = 0x000033;
+    scene.fog = new THREE.Fog(color, near, far);
+    scene.background = new THREE.Color(color);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("canvas3d"),antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight)
