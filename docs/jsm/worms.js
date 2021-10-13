@@ -65,7 +65,7 @@ fbxLoader.load(
         //scene.add(worm);
         worm.traverse(function (child) {
             if(child.animations.length>0){
-                console.log(child);
+               // console.log(child);
                 child.name = "animatedGroup";
                 originalAnimation = child.animations[0];
                 mixer = new THREE.AnimationMixer( worm );
@@ -122,9 +122,13 @@ function animate() {
     raycaster.setFromCamera( mouse, camera );
     const intersection = raycaster.intersectObject( scene );
     if ( intersection.length > 0 ) {
-        if(intersection[ 0 ].object.parent.wormID){
+        if(typeof (intersection[ 0 ].object.parent.wormID)=="number"){
+
             focusedWorm=intersection[ 0 ].object.parent.wormID;
             actions[focusedWorm].play();
+        }
+        else{
+            //console.log(intersection[ 0 ].object);
         }
     }
 

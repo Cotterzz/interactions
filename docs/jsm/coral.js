@@ -20,8 +20,7 @@ scene.add(light)
 const ambientLight = new THREE.AmbientLight()
 scene.add(ambientLight)
 const cNear = 1;
-            const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2( 1, 1 );
+
 const cFar = 100000;
 const camera = new THREE.PerspectiveCamera(
     75,
@@ -29,7 +28,16 @@ const camera = new THREE.PerspectiveCamera(
     cNear,
     cFar
 )
-camera.position.set(0, 3, 10.0)
+camera.position.set(0, 8, 3);
+
+    const near = 1;
+    const far = 20;
+    const color = 0x000033;
+    scene.fog = new THREE.Fog(color, near, far);
+    scene.background = new THREE.Color(color);
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2( 1, 1 );
 document.addEventListener( 'mousemove', onMouseMove );
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("canvas3d"),antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -40,27 +48,60 @@ controls.enableDamping = true
 controls.target.set(0, 1, 0)
 
 //const material = new THREE.MeshNormalMaterial()
-
-let coral;
+let heightmap;
+let coral, coral2;
+let coral2geo, coral2mat;
 let count = 100;
 let corals = new Array(count);
 let colours = new Array(count);
 let interacted = new Array(count)
 let materials = new Array(count);
-let spread = 20;
+let spread = 30;
 let minscale = 1;
 let maxscale = 3;
 let basescale = 0.01;
+const fbxLoader = new FBXLoader();
+const imageLoader = new THREE.TextureLoader();
 
-const fbxLoader = new FBXLoader()
-fbxLoader.load(
-urlprefix + 'coral/coral3.fbx',
+var tanFOV = Math.tan((Math.PI / 360) * camera.fov);
+var windowHeight = window.innerHeight;
+window.addEventListener('resize', onWindowResize, false);
+
+loadImage();
+
+function loadImage(){
+    imageLoader.load( urlprefix + 'coral/height.png',
+    function ( image ) {
+        heightmap = image;
+        coral2geo = new THREE.SphereGeometry(15, 128, 64);
+        coral2mat = new THREE.MeshStandardMaterial( {
+                                //map: imgTexture,
+                                bumpMap: heightmap,
+                                bumpScale: 10,
+                                //color: bleachedColor,
+                                //specular: specularColor,
+                                //reflectivity: beta,
+                                //displacementMap : heightmap,
+                                //displacementScale : 1
+                                //shininess: specularShininess,
+                                //envMap: alphaIndex % 2 === 0 ? null : reflectionCube
+                            } );
+        coral2 = new THREE.Mesh(coral2geo,coral2mat);
+
+        loadGeometry();
+    }, null, null
+    );
+}
+
+function loadGeometry(){
+    fbxLoader.load(
+        urlprefix + 'coral/coral3.fbx',
     (object) => {
         
         coral = object;
         //scene.add(coral);
-        const bleachedColor = Math.random();
-        const bleachedRGBColor = new THREE.Color( 1, bleachedColor, bleachedColor );
+       const bleachedColor = Math.random();
+       const bleachedRGBColor = new THREE.Color( 1, bleachedColor, bleachedColor );
 
         var material = new THREE.MeshPhongMaterial( {
                                 //map: imgTexture,
@@ -85,15 +126,36 @@ urlprefix + 'coral/coral3.fbx',
         
         for ( let p = 0; p < count; p ++ ) {
             //corals[p] = SKUTILS.clone(coral);
-            corals[p] = coral.clone();
+            if(Math.random()>0.3){
+                corals[p] = coral.clone();
+                materials[p] = new THREE.MeshPhongMaterial();
+                let scale = minscale + (Math.random()*(maxscale-minscale));
+                corals[p].scale.set(basescale*scale, basescale*scale, basescale*scale);
+            } else {
+                corals[p] = coral2.clone();
+                materials[p] = new THREE.MeshStandardMaterial( {
+                                //map: imgTexture,
+                                bumpMap: heightmap,
+                                bumpScale: 1,
+                                //color: bleachedColor,
+                                //specular: specularColor,
+                                //reflectivity: beta,
+                                displacementMap : heightmap,
+                                displacementScale : 2
+                                //shininess: specularShininess,
+                                //envMap: alphaIndex % 2 === 0 ? null : reflectionCube
+                            } );
+                let scale = minscale + (Math.random()*(maxscale-minscale)*2);
+                corals[p].scale.set(basescale*scale, basescale*(minscale + (Math.random()*(maxscale-minscale))), basescale*scale);
+            }
+            
             //console.log(corals[p])
             scene.add(corals[p]);
             interacted[p] = false;
-            corals[p].position.set((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
+            corals[p].position.set((Math.random()*spread)-(spread/2), 0, (Math.random()*(-spread))+(spread/2));
             corals[p].rotation.y = Math.random()*6;
-            let scale = minscale + (Math.random()*(maxscale-minscale));
-            corals[p].scale.set(basescale*scale, basescale*scale, basescale*scale);
-            materials[p] = new THREE.MeshPhongMaterial();
+            
+            
             colours[p] = new THREE.Color( Math.random(), Math.random(), Math.random() );
             let bleachedColorLevel = (colours[p].r + colours[p].g + colours[p].b)/3;
             materials[p].color = new THREE.Color(bleachedColorLevel, bleachedColorLevel, bleachedColorLevel );
@@ -116,12 +178,8 @@ urlprefix + 'coral/coral3.fbx',
         console.log(error)
     }
 )
+}
 
-
-
-var tanFOV = Math.tan((Math.PI / 360) * camera.fov);
-var windowHeight = window.innerHeight;
-window.addEventListener('resize', onWindowResize, false);
 function onWindowResize(event) {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.fov = (360 / Math.PI) * Math.atan(tanFOV * (window.innerHeight / windowHeight));
@@ -130,6 +188,7 @@ function onWindowResize(event) {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.render(scene, camera);
 }
+
 function onMouseMove( event ) {
 
                 event.preventDefault();
@@ -138,8 +197,7 @@ function onMouseMove( event ) {
                 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
             }
-//const stats = Stats()
-//document.body.appendChild(stats.dom)
+
 
 function animate() {
     requestAnimationFrame(animate)
