@@ -33,8 +33,8 @@ controls.target.set(0, 1, -3)
 
 let worm;
 let focusedWorm;
-let count = 50;
-let spread = 10;
+let count = 20;
+let spread = 7;
 let worms = new Array(count);
 let speeds = new Array(count);
 let actions = new Array(count);
@@ -60,7 +60,7 @@ fbxLoader.load(
     (object) => {
 
         // ORIGINAL
-        object.scale.set(.3, .3, .3);
+        object.scale.set(.5, .5, .5);
         worm = object;
         //scene.add(worm);
         worm.traverse(function (child) {
