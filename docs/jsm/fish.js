@@ -27,8 +27,8 @@ const camera = new THREE.PerspectiveCamera(
     cNear,
     cFar
 )
-camera.position.set(0.8, 1.4, 1.0);
-
+camera.position.set(1, -1, 4.0);
+camera.lookAt(scene.position)
 
     const near = 1;
     const far = 5;
@@ -45,12 +45,13 @@ controls.enableDamping = true
 controls.target.set(0, 1, 0)
 
 //const material = new THREE.MeshNormalMaterial()
-
+let spread = 1;
 let container = new THREE.Mesh();
-scene.add(container);
+//scene.add(container);
 let count = 150;
-let worms = new Array(count);
-let animations = new Array(count)
+let fish = new Array(count);
+let directions = new Array(count);
+let speeds = new Array(count);
 
 let mixer;
 
@@ -72,11 +73,12 @@ gLoader.load(
         container.add(object.scenes[0]);
         
         for ( let p = 0; p < count; p ++ ) {
-            worms[p] = container.clone();
-            scene.add(worms[p]);
-            worms[p].position.set((Math.random()*5)-2.5,  Math.random()*-5, Math.random()*-5);
-            worms[p].rotation.y = Math.random()*6;
-            
+            fish[p] = container.clone();
+            scene.add(fish[p]);
+            fish[p].position.set((Math.random()*spread)-(spread/2),  Math.random()*-spread, Math.random()*-spread);
+            fish[p].rotation.y = Math.random()*6;
+            directions[p] = fish[p].rotation.y;
+            speeds[p] = 0.01 + Math.random()/100;
         }
         animate();
         
@@ -111,6 +113,19 @@ function animate() {
     controls.update()
 
     render()
+
+    for ( let p = 0; p < count; p ++ ) {
+        let vx = speeds[p] * Math.cos( directions[p]);
+        let vz = speeds[p] * Math.sin( directions[p]);
+        fish[p].position.x -= vx;
+        fish[p].position.z += vz;
+        if(container.position.distanceTo(fish[p].position)>3){
+            directions[p] +=3.1;
+            
+        }
+        directions[p] += (0.05 - Math.random()/10);
+        fish[p].rotation.y = directions[p];
+    }
 
     //stats.update()
 }
