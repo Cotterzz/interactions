@@ -32,7 +32,7 @@ const cFar = 100000;
 const camera = new THREE.PerspectiveCamera(45, cWidth / cHeight, cNear, cFar);
 //const camera = new THREE.OrthographicCamera( cWidth / - 2, cWidth / 2, cHeight / 2, cHeight / - 2, cNear, cFar );
 scene.add(camera);
-camera.position.set(0, 1, 10);
+camera.position.set(0, 10, 5);
 camera.lookAt(scene.position)
 var orbitcontrols = new OrbitControls(camera, document.getElementById("canvas3d"));
 
@@ -52,6 +52,9 @@ scene.add(light2);
 
 let targetObject = new THREE.Object3D();
 scene.add(targetObject);
+targetObject.position.x = 2;
+targetObject.position.y = 2;
+targetObject.position.z = 2;
 
 let gLoaded = false;
 let iLoaded = false;
@@ -60,9 +63,15 @@ let wingImage = null;
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2( 1, 1 );
-document.addEventListener( 'mousemove', onMouseMove );
+document.addEventListener( 'mousedown', onMouseClick );
 
-let spread = 1;
+let spread = 10;
+const geometry = new THREE.PlaneGeometry( spread*1.3, spread*1.3 );
+const material = new THREE.MeshBasicMaterial( {color: 0x442211, side: THREE.DoubleSide} );
+const plane = new THREE.Mesh( geometry, material );
+plane.rotation.x = 1.57;
+//plane.position.z = spread/2;
+scene.add( plane );
 let bspread = 4;
 let mustard, wingMesh, wingMaterial, wingGeometry, stats, gui, wingTexture;
 let leftMatrix = new THREE.Object3D();
@@ -74,8 +83,8 @@ let wingCount = butterflyCount*2;
 let minscale = 1;
 let maxscale = 3;
 let basescale = 30;
-const accel = 0.0005;
-const base_vel_limit = 0.015;
+const accel = 0.001;
+const base_vel_limit = 0.02;
 const positions = new Array(butterflyCount);
 const velocities = new Array(butterflyCount);
 const vectors = new Array(butterflyCount);
@@ -87,7 +96,7 @@ const wingSpeeds = new Array(butterflyCount);
 const wingMin = -1.5;
 const wingMax = 0.2;
 for ( let p = 0; p < butterflyCount; p ++ ) {
-    positions[p] = {x:(Math.random()*bspread)-(bspread/2), y:(Math.random()*bspread)+(bspread/2), z:Math.random()*(-bspread)}
+    positions[p] = {x:targetObject.position.x, y:targetObject.position.y, z:targetObject.position.z}
    // ((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
     if(p===0){ targets[p] = butterflyCount-1;} else if (p===1){targets[p]=0} else {
         targets[p] = Math.floor(Math.random()*p);
@@ -118,9 +127,9 @@ fbxLoader.load(
         for ( let m = 0; m < mustardCount; m ++ ) {
             mustards[m] = mustard.clone();
             scene.add(mustards[m]);
-            let scale = minscale + (Math.random()*(maxscale-minscale));
+            let scale = 2;//minscale + (Math.random()*(maxscale-minscale));
             mustards[m].scale.set(basescale*scale, basescale*scale, basescale*scale);
-            mustards[m].position.set((Math.random()*spread)-(spread/2), 0, Math.random()*(-spread));
+            mustards[m].position.set(0, 0, 0);
             mustards[m].rotation.y = Math.random()*6;
             mustards[m].traverse(function (child) {
                     if ( child instanceof THREE.Mesh ) {
@@ -177,7 +186,7 @@ function animate(){
     requestAnimationFrame(() => { animate() } );
 
     if ( iLoaded&&gLoaded&&mLoaded ) {
-    	console.log("animate")
+    	//console.log("animate")
         const time = Date.now() * 0.001;
         //wingMesh.rotation.x = Math.sin( time / 4 );
         //wingMesh.rotation.y = Math.sin( time / 2 );
@@ -251,23 +260,7 @@ function animate(){
 
         wingMesh.instanceMatrix.needsUpdate = true;
 
-                raycaster.setFromCamera( mouse, camera );
-           
-                const intersection = raycaster.intersectObject( scene );
-
-                if ( intersection.length > 0 ) {
-
-                    
-                    let targetTo = intersection[ 0 ].object.parent
-                    console.log(targetTo);
-                    targetObject.position.x = targetTo.x;
-                    targetObject.position.y = targetTo.y;
-                    targetObject.position.z = targetTo.z;
-
-                    //mesh.setColorAt( instanceId, color.setHex( Math.random() * 0xffffff ) );
-                    //mesh.instanceColor.needsUpdate = true;
-
-                }
+                
 
     }
 
@@ -275,12 +268,31 @@ function animate(){
     //stats.update();
 }
 
-function onMouseMove( event ) {
-
+function onMouseClick( event ) {
+ console.log("click");
                 event.preventDefault();
 
                 mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
                 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+                raycaster.setFromCamera( mouse, camera );
+           
+                const intersection = raycaster.intersectObject( scene );
+
+                if ( intersection.length > 0 ) {
+                	 console.log("clicked");
+                    
+                    let targetTo = intersection[ 0 ].object
+                    console.log(targetTo);
+                    
+                    targetObject.position.x = targetTo.position.x;
+                    targetObject.position.y = targetTo.position.y+1;
+                    targetObject.position.z = targetTo.position.z;
+                    console.log(targetObject.position.x,targetObject.position.y,targetObject.position.z);
+                    //mesh.setColorAt( instanceId, color.setHex( Math.random() * 0xffffff ) );
+                    //mesh.instanceColor.needsUpdate = true;
+
+                }
 
             }
 
