@@ -56,6 +56,8 @@ targetObject.position.x = 2;
 targetObject.position.y = 2;
 targetObject.position.z = 2;
 
+globalThis.activated = false;
+
 let gLoaded = false;
 let iLoaded = false;
 let mLoaded = false;
@@ -280,17 +282,25 @@ function onMouseClick( event ) {
                 const intersection = raycaster.intersectObject( scene );
 
                 if ( intersection.length > 0 ) {
-                	 console.log("clicked");
-                    
-                    let targetTo = intersection[ 0 ].object
-                    console.log(targetTo);
-                    
-                    targetObject.position.x = targetTo.position.x;
-                    targetObject.position.y = targetTo.position.y+1;
-                    targetObject.position.z = targetTo.position.z;
-                    console.log(targetObject.position.x,targetObject.position.y,targetObject.position.z);
-                    //mesh.setColorAt( instanceId, color.setHex( Math.random() * 0xffffff ) );
-                    //mesh.instanceColor.needsUpdate = true;
+                	 console.log("clicked" + globalThis.activated);
+                    if(globalThis.activated){
+                    	targetObject.position.x = 2;
+                    	targetObject.position.y = 2;
+                    	targetObject.position.z = 2;
+                    	globalThis.activated = false;
+                    } else {
+                    	let targetTo = intersection[ 0 ].object
+                    	console.log(targetTo);
+                    	
+                    	targetObject.position.x = targetTo.position.x;
+                    	targetObject.position.y = targetTo.position.y+1;
+                    	targetObject.position.z = targetTo.position.z;
+                    	console.log(targetObject.position.x,targetObject.position.y,targetObject.position.z);
+                    	//mesh.setColorAt( instanceId, color.setHex( Math.random() * 0xffffff ) );
+                    	//mesh.instanceColor.needsUpdate = true;
+                    	globalThis.activated = true
+                    }
+
 
                 }
 
