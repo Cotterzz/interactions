@@ -54,14 +54,14 @@ plane.rotation.x = 1.57;
 plane.position.z = spread/-2;
 scene.add( plane );
 
-const fbxLoader = new GLTFLoader()
+const fbxLoader = new FBXLoader()
 fbxLoader.load(
-    urlprefix + 'worms/worm_dive.gltf',
+    urlprefix + 'worms/worm_dive.fbx',
     (object) => {
 
         // ORIGINAL
 
-        worm = object.scene;
+        worm = object;
         
         console.log(worm);
         scene.add(worm);
@@ -140,7 +140,7 @@ function animate() {
         //mixer.update(d); // ORIGINAL
 
         for ( let p = 0; p < count; p ++ ) {
-          //mixers[p].update(d*speeds[p]); // CLONES
+          mixers[p].update(d*speeds[p]); // CLONES
           
         }
         //mixers[focusedWorm].update(d*speeds[focusedWorm]);
